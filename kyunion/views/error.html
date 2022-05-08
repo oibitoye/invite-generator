@@ -1,0 +1,58 @@
+<html><head><title>Request Rejected</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+    
+    <style type="text/css">
+    body {margin-left: 0px;margin-top: 0px;margin-right: 0px;margin-bottom: 0px;}
+    #rejected-message-container {text-align: center;color:#FFFFFF;background-color: #000;width:90%;height:90%;padding: 20px;margin:0px;}
+    .ghost-button-white {border: 1px solid #fff;clear: left;color: #fff;font-family: Arial,Helvetica,sans-serif;font-size: 14px;font-weight: bold;margin:0px auto 10px auto;padding: 10px;text-align: center;  text-decoration: none;transition: background-color 0.3s ease-in 0s;width: 200px;background-color: #000;text-transform:uppercase;}    
+    .rejected-message {font-family: Arial, Helvetica, sans-serif;font-size: 16px;color: #FFF;}
+    .ghost-button-white:hover {border: 1px solid #B99400;color: #B99400;transition: 0.5s ease-in;}	
+    .button-container {width:100%; text-align:center; float:none; text-decoration:none;}
+    embed {text-align: center;margin:0px auto;width:30%;}
+    #rejected-message-container #IF-logo {margin-top: 0px;margin-right: auto;margin-bottom: 0px;margin-left: auto;}
+    .button-container a {text-decoration:none;}
+    #rejected-message-container embed {text-align: center;}
+    .apology {font-family: 'Open Sans', sans-serif;font-size: 48px;color: #E8D587;}
+    
+    @media (max-width: 600px) {
+        .apology {font-family: 'Open Sans', sans-serif;font-size: 48px;color: #E8D587;}
+        embed {width:50%;}
+    }
+    
+    @media (max-width: 400px) {
+        .apology {font-family: 'Open Sans', sans-serif;	font-size: 30px;color: #E8D587;}
+        embed {width:80%;}
+    }
+    
+    .no-item {
+        {# display: inline-block; #}
+        {# position: relative; #}
+        {# left: -50px; #}
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1em;
+        color: #ccc;
+        text-shadow: 0 -1px 1px #666, 0 1px 1px #fff;
+        {# transform: rotate(-5deg); #}
+    }
+    </style>
+    
+    
+    </head><body bgcolor="#000000">
+    <div id="rejected-message-container">
+    <br><br>
+    <span class="apology no-item">Sorry, but the page you requested cannot be reached.</span>
+    <br><br>
+    <span class="rejected-message">The requested URL was rejected. Please consult with your administrator.</span>
+    <br>
+    <span class="rejected-message">Your support ID is: <strong>3851674341373198534</strong></span>
+    <br><br><br>
+    <div class="button-container"><a href="javascript:history.back();"><div class="ghost-button-white">Go Back</div></a></div>
+    <h1 class="rejected-message">{{message}}</h1>
+    <h2 class="rejected-message">{{error.status}}</h2>
+    <pre class="rejected-message">{{error.stack}}</pre>
+    </div>
+    
+    </body></html>
+    
