@@ -23,7 +23,7 @@ window.onload = function(){
         cxt.fillStyle = '#030424';
         cxt.fillText(numb, canvas.width / 1.15, canvas.height / 22);
     };
-    imageObj.src = "images/456yr784876fds.jpg"; 
+    imageObj.src = "invitecard/456yr784876fds.jpg"; 
 };
 
 
