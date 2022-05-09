@@ -9,9 +9,9 @@ const bcrypt = require('bcryptjs');
 const { get } = require('http');
 //let TOKEN_KEY = process.env.SESSION_SECRET1;
 
-router.get('/new', async function(req, res) {
-    res.render('new-iv')
-});
+// router.get('/new', async function(req, res) {
+//     res.render('new-iv')
+// });
 
 router.get('/:urlCode', async function(req, res) {
     let urlCode = req.params.urlCode;
@@ -25,7 +25,7 @@ router.get('/:urlCode', async function(req, res) {
                 while (num.length < size) num = "0" + num;
                 return num;
             };
-            payload.ivSerial = pad(payload.seatnumber,6);
+            payload.ivSerial = pad(payload.id,3);
             res.render('invitation', {
                 payload: payload
             })

@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const User = require('../controller/passport').User;
 const Invite = require('../controller/passport').Invite;
-const inPass = require('../controller/passport')
+const inPass = require('../controller/passport');
 const bcrypt = require('bcryptjs');
 
 const { get } = require('http');
@@ -29,9 +29,58 @@ router.get('/', async function(req, res) {
     }
 });
 
+router.post('/new', async function(req, res) {
+    let user = null;
+    let loggedIn = false;
+    console.log(JSON.stringify(req.body,null,4));
+    if (checkAuthentication(req)|| req.isAuthenticated()) {
+        loggedIn = true,
+        user = {
+            'lastName': req.session.passport.user.profile.lastName,
+            'firstName': req.session.passport.user.profile.firstName,
+            'username': req.session.passport.user.profile.username,
+            'userid': req.session.passport.user.profile.id
+        };
+        let guests = [];
+        let = outList = []
+        let reqBody = req.body;
+        for (let key in reqBody) {
+            if (key.includes("guest") && reqBody[key] != "") {
+                guests.push(reqBody[key]);
+            };
+        };
+        
+
+        for(let item in guests) {
+            let payload = {
+                guestname: guests[item],
+                createdby: user.userid,
+                urlcode: genIVCode(),
+                tablelabel: reqBody.tablelabel,
+                invitedby: reqBody.invitedby
+            };
+            outList.push(payload);
+        };
+        await inPass.bulkInvite(user.username,outList)
+        .then(function(resp){
+            res.redirect('/created')
+        })
+
+    
+        // await Invite()
+        // res.status(200);
+        // res.send(JSON.stringify( {
+        // user:user}, null, 4));
+    } else {
+        res.redirect('/login')
+    }
+});
+
 router.get('/new', async function(req, res) {
     let user = null;
     let loggedIn = false;
+    let allHosts = [];
+    let allTables = [];
     let payload = {},
         errors = {},
         info = {};
@@ -42,33 +91,30 @@ router.get('/new', async function(req, res) {
             'firstName': req.session.passport.user.profile.firstName,
             'username': req.session.passport.user.profile.username
         };
-        // await inPass.getAllInvite(user.username)
-        // .then(function(get_res){
-        //     if(get_res.response) {
-        //         payload = get_res.payload;
-        //         function pad(num, size) {
-        //             num = num.toString();
-        //             while (num.length < size) num = "0" + num;
-        //             return num;
-        //         };
-        //         payload.ivSerial = pad(payload.seatnumber,6);
-        //         res.render('invitation', {
-        //             payload: payload
-        //         })
-        //     } else {
-        //         res.redirect('/');
-        //     }
-        // })
-        // await Invite()
-        // res.status(200);
-        res.render('new-invite',{
+        let getHosts = (await inPass.getHosts()).payload;
+        console.log("Hosts List: " + JSON.stringify(getHosts,null,4));
+        for (let key in getHosts) {
+            if (getHosts[key] != "") {
+                allHosts.push(getHosts[key].hostname);
+                console.log("Hosts: " + getHosts[key].hostname)
+            };
+        };
+        let getTables = (await inPass.getTables()).payload;
+        for (let key in getTables) {
+            if (getTables[key] != "") {
+                allTables.push(getTables[key].label);
+            };
+        };
+        res.render('new-iv',{
             user:user,
             payload: payload,
             errors,
+            allHosts,
+            allTables,
             info
         });
     } else {
-        // res.redirect('/login')
+        res.redirect('/login')
     }
     
 });
@@ -94,6 +140,7 @@ router.get('/created', async function(req, res) {
                 response = true;
                 for(let i=0;i < payload.length;i++){
                     let date = new Date(payload[i].createdAt);
+                    payload[i].seatnumber = payload[i].id;
                     payload[i].timestamp = date.getDate()+
                     "/"+(date.getMonth()+1)+
                     "/"+date.getFullYear()+
@@ -219,7 +266,6 @@ router.get('/logout', async function(req, res){
 router.get('/login', function(req, res, next) {
     let errors = req.session.errors,
         info = req.session.info;
-    // req.session.info = "djhgrfsdghf";
     if (checkAuthentication(req) || req.isAuthenticated()) {
         res.redirect('/created');
     } else {
@@ -241,6 +287,36 @@ function genIVCode() {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
+};
+async function getSeatnumber() {
+    let response = await inPass.getSeats();
+    console.log("Response: " + JSON.stringify(response.payload, null, 4));
+    return response.payload;
+    // console.log(JSON.stringify(takenSeats,null,4));
+}
+function seatNumber() {
+    let text = "";
+    let seatChosen = false;
+    let possible = "0123456789";
+    let takenSeats = getSeatnumber();
+    console.log(JSON.stringify(takenSeats,null,4));
+    function genSeatnumber(){
+        for (var i = 0; i < 3; i++) {
+            return text += possible.charAt(Math.floor(Math.random() * possible.length));
+        };
+        for (let i=0; i<takenSeats.length;i++) {
+            if (takenSeats[i].seatnumber == text) {
+                seatChosen = true;
+                break;
+            }
+        }
+        if(parseInt(text) > 600 || seatChosen) {
+            genSeatnumber();
+        } else {
+            return text
+        }
+    };
+    return genSeatnumber();
 };
 
 function genUrlSecret(img) {

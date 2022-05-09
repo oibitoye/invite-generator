@@ -19,8 +19,8 @@ Created Invitations
 {% endblock %}
 {% block scripts %}
 {{super()}}
-<script type="text/javascript" src="/vendor/jquery/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="/vendor/jquery/jquery-3.2.1.min.js"></script> -->
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> -->
 <script>
 function copyUrl(target) {
    var str = document.getElementById(target).value;
@@ -76,7 +76,7 @@ document.querySelector("#copyButton").addEventListener("click", copyUrl);
             <button class="btn btn-lg btn-primary .navbar-right" data-toggle="modal" data-target="#add_entry">Add Entry</button>
           </div> -->
         <div class="col-sm-9 col-sm-offset-2 col-md-10 col-md-offset-1 main" id="entries">
-            <h1 class="page-header">"Hello, {{ user.firstName }}</h1>
+            <h1 class="page-header">"Hello {{ user.firstName }}!</h1>
 
             <h2 class="sub-header">List of generated Invitation Card</h2>
 
@@ -86,7 +86,7 @@ document.querySelector("#copyButton").addEventListener("click", copyUrl);
 <!--        <button type="button" class="btn btn-primary custom-button-width">z1</button> -->
         </div>
         <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-info" .navbar-right" data-toggle="modal" data-target="#add_entry">Generate IV</button>
+        <a type="button" class="btn btn-info .navbar-right" href="/new">Generate IV</a>
         <!-- <button style="height:38px; " class="btn btn-lg btn-primary .navbar-right" data-toggle="modal" data-target="#add_entry">Add Entry</button> -->
       <!-- <button type="button" class="btn btn-danger .navbar-right">z3</button> -->
       </div>
@@ -134,7 +134,7 @@ document.querySelector("#copyButton").addEventListener("click", copyUrl);
                     </td>
                     <td>{{ entry.timestamp }}</td>
                     <td>
-                    {% if user.id == entry.createdby %}
+                    {% if user.username == "oibitoye" %}
                         <button type="button" class="btn btn-danger delete-funds-btn" data-toggle="modal" data-target="#del-{{ loop.index }}">Delete</button>&nbsp;&nbsp;<button type="button" class="btn btn-primary edit-funds-btn" data-toggle="modal" data-target="#edit-{{ loop.index }}">Modify</button>
                       <!--Tranzact Modal 2 -->
                       <div class="modal fade" id="del-{{ loop.index }}" role="dialog" tabindex="-1">

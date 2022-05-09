@@ -39,6 +39,20 @@ sequelize
         console.error("Connection failed:", err);
     });
 
+const Host = sequelize.define('host', {
+    id: {type: Sequelize.SMALLINT, autoIncrement: true, unique: true, primaryKey: true},
+    hostname: {type: Sequelize.STRING, allowNull: false, unique: true, trim: true, validate: {notEmpty: true, min: 3}},
+    createdAt: {type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), trim: true},
+    updatedAt: {type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), trim: true}
+});
+
+const TableLabel = sequelize.define('tablelabel', {
+    id: {type: Sequelize.SMALLINT, autoIncrement: true, unique: true, primaryKey: true},
+    label: {type: Sequelize.STRING, allowNull: false, unique: true, trim: true, validate: {notEmpty: true, min: 3}},
+    createdAt: {type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), trim: true},
+    updatedAt: {type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), trim: true}
+});
+
 const User = sequelize.define('user', {
     id: {type: Sequelize.SMALLINT, autoIncrement: true},
     userid: {type: Sequelize.UUIDV4, unique: true, defaultValue: Sequelize.UUIDV4, primaryKey: true},
@@ -54,7 +68,7 @@ const User = sequelize.define('user', {
 
 const Invite = sequelize.define('invite', {
     id: {type: Sequelize.SMALLINT, autoIncrement: true},
-    seatnumber: {type: Sequelize.INTEGER},
+    seatnumber: {type: Sequelize.INTEGER, allowNull: true},
     inviteid: {type: Sequelize.UUIDV4, unique: true, defaultValue: Sequelize.UUIDV4, primaryKey: true},
     tablelabel: {type: Sequelize.STRING, allowNull: false, trim: true, validate: {notEmpty: true, min: 1}},
     guestname: {type: Sequelize.STRING, allowNull: false, trim: true, validate: {notEmpty: true, min: 3}},
@@ -65,23 +79,6 @@ const Invite = sequelize.define('invite', {
     updatedAt: {type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), trim: true}
 });
 
-
-// passport.use(new LocalStrategy(async function(username, password, done) {
-//       await User.findOne({where: {username: username}}, function (err, user) {
-//           if (err) {
-//               return done(err);
-//           }
-//           if (!user) {
-//               return done(null, false);
-//           }
-//           if (bcrypt.compareSync(password, user.hash)){
-//             return done(null, user);
-//           }
-//           return done(null, false);
-          
-//       });
-//     }
-// ));
 
 
 async function auth(username,password) {
@@ -133,11 +130,56 @@ async function getThisIV(urlCode) {
     }
 };
 
-async function createInvite(username, inload) {
+async function getHosts() {
+    let response = false;
+    let payload = [];
+    const allHosts = await Host.findAll({attributes:['hostname']});
+    if (allHosts) {
+        response = true;
+        payload = allHosts;
+    }
+    return {
+        response,
+        payload
+    }
+};
+
+async function getTables() {
+    let response = false;
+    let payload = [];
+    const allTables = await TableLabel.findAll({attributes:['label']});
+    if (allTables) {
+        response = true;
+        payload = allTables;
+    }
+    return {
+        response,
+        payload
+    }
+};
+
+async function getSeats() {
+    let response = false;
+    let payload = [];
+    const allSeats = await Invite.findAll({attributes:['seatnumber']});
+    if (allSeats) {
+        response = true;
+        payload = allSeats;
+    }
+    return {
+        response,
+        payload
+    }
+}
+
+async function bulkInvite(username, inload) {
     let response = false,
         payload = {};
     if (username && inload) {
-
+        Invite.bulkCreate(inload)
+        .then(function(resp){
+            response = true
+        })
     }
     return {
         response,
@@ -172,8 +214,12 @@ passport.deserializeUser((obj, done) => {
 module.exports = {
     auth,
     User,
+    getTables,
+    getHosts,
     Invite,
     passport,
     getThisIV,
-    getAllInvite
+    getAllInvite,
+    bulkInvite,
+    getSeats
 }

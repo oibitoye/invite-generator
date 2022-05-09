@@ -1,10 +1,10 @@
-/* @extend display-flex; */
+@extend display-flex;
 display-flex {
   display: flex;
   display: -webkit-flex; }
 
-/* @extend list-type-ulli; */
-list-type-ulli, ul {
+@extend list-type-ulli; */
+/* list-type-ulli, ul {
   list-style-type: none;
   margin: 0;
   padding: 0; }
@@ -106,7 +106,7 @@ h2 {
   padding: 0;
   font-weight: bold;
   color: #222;
-  font-family: 'Roboto Slab';
+  /* font-family: 'Roboto Slab'; */
   font-size: 20px;
   margin-bottom: 30px;
   text-transform: uppercase; }
@@ -134,17 +134,18 @@ body {
   -ms-background-size: cover;
   background-position: center center;
   font-weight: 400;
-  font-family: 'Roboto Slab';
+  /* font-family: 'Roboto Slab'; */
   margin: 0px; }
 
 .main {
   padding: 60px 0;
   position: relative; }
 
-.container {
+.container2 {
   width: 586px;
   background: #fff;
-  margin-left: 165px;
+  align-self:auto;
+  /* margin-left: 165px; */
   border-radius: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -162,7 +163,7 @@ input, select {
   padding: 5px 0;
   color: #222;
   margin-bottom: 31px;
-  font-family: 'Roboto Slab'; }
+  /* font-family: 'Roboto Slab'; } */
   input:focus, select:focus {
     color: #222;
     border-bottom: 2px solid #4966b1; }
@@ -317,4 +318,4 @@ li.init {
   .appointment-form {
     padding: 50px 30px 70px 30px; } }
 
-/*# sourceMappingURL=style.css.map */
+# sourceMappingURL=style.css.map
