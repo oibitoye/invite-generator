@@ -23,6 +23,22 @@ Created Invitations
 <!-- <script type="text/javascript" src="/vendor/jquery/jquery-3.2.1.min.js"></script> -->
 <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> -->
 <script type='text/javascript'>
+    $(document).ready(function () {
+        $("#invitedby").change(function() {
+            let val = $(this).val();
+            if(val == "AddHost") {
+                $("#add_host").show();
+                $("#invitedby").hide();
+            }
+        });
+    $("#tablelabel").change(function() {
+        let val = $(this).val();
+        if(val == "AddTable") {
+            $("#add_table").show();
+            $("#tablelabel").hide();
+        };
+    })
+    });
     function addFields(){
         // Generate a dynamic number of inputs
         let num = parseInt(document.getElementById("guest").value);
@@ -143,19 +159,23 @@ Created Invitations
                     </div>
                     <div class="col-sm-4">
                     <select name="invitedby" id="invitedby">
+                        <option disabled selected value=null>Host Name</option>
                         {% for entry in allHosts %}
                         <option value="{{entry}}">{{entry}}</option>
                         {% endfor %}
                         <option value="AddHost">Add Host</option>
                     </select>
+                    <input type="text" id="add_host" name="new_host_name" size="25" placeholder="Enter Host Name" style="display:none;">
                     </div>
                     <div class="col-sm-4">
                         <select name="tablelabel" id="tablelabel">
+                            <option disabled selected value=null>Table Name</option>
                             {% for entry in allTables %}
                             <option value="{{entry}}">{{entry}}</option>
                             {% endfor %}
                             <option value="AddTable">Add New Table</option>
                         </select>
+                        <input type="text" id="add_table" name="new_table_name" size="25" placeholder="Enter Table Name" style="display:none;">
                         </div>
                     <a type="" href="#" id="filldetails" onclick="addFields()">Add Guest(s)</a>
                     </div>

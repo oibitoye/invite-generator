@@ -59,6 +59,18 @@ router.post('/new', async function(req, res) {
                 tablelabel: reqBody.tablelabel,
                 invitedby: reqBody.invitedby
             };
+            if (reqBody.invitedby == "AddHost" && reqBody.new_host_name != "") {
+                payload.invitedby = reqBody.new_host_name;
+                await inPass.addHost(reqBody.new_host_name);
+            } else {
+                payload.invitedby = "Unattached"
+            };
+            if (reqBody.tablelabel == "AddTable" && reqBody.new_table_name != "") {
+                payload.tablelabel = reqBody.new_table_name;
+                await inPass.addTable(reqBody.new_table_name);
+            } else {
+                payload.tablelabel = "Unassigned"
+            };
             outList.push(payload);
         };
         await inPass.bulkInvite(user.username,outList)

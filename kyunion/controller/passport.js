@@ -172,6 +172,46 @@ async function getSeats() {
     }
 }
 
+async function addHost(hostname) {
+    let response = false;
+    const getHost = await Host.findOne({
+        where: {
+            hostname: hostname
+        }
+    });
+    if (!getHost) {
+        let newHost = new Host({hostname:hostname});
+        await newHost.save()
+        .then(function(){
+            response = true
+        })
+        .catch(function(err) {
+            console.error(err);
+        })
+    }
+    return response;
+};
+
+async function addTable(label) {
+    let response = false;
+    const getTable = await TableLabel.findOne({
+        where: {
+            label: label
+        }
+    });
+    if (!getTable) {
+        let newTable = new TableLabel({label:label});
+        await newTable.save()
+        .then(function(){
+            response = true
+        })
+        .catch(function(err) {
+            console.error(err);
+        })
+    }
+    return response;
+};
+
 async function bulkInvite(username, inload) {
     let response = false,
         payload = {};
@@ -221,5 +261,7 @@ module.exports = {
     getThisIV,
     getAllInvite,
     bulkInvite,
-    getSeats
+    getSeats,
+    addTable,
+    addHost
 }
