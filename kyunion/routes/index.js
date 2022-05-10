@@ -59,6 +59,7 @@ router.post('/new', async function(req, res) {
                 tablelabel: reqBody.tablelabel,
                 invitedby: reqBody.invitedby
             };
+            payload.guestname = encodeURI(payload.guestname);
             if (reqBody.invitedby == "AddHost" && reqBody.new_host_name != "") {
                 payload.invitedby = reqBody.new_host_name;
                 await inPass.addHost(reqBody.new_host_name);
@@ -295,7 +296,7 @@ function genIVCode() {
     var text = "";
     var possible = "0123456789abcdefghijklmnopqrstuvwxyz";
 
-    for (var i = 0; i < 6; i++)
+    for (var i = 0; i < 8; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
