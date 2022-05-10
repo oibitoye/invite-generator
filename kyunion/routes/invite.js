@@ -20,6 +20,7 @@ router.get('/:urlCode', async function(req, res) {
     .then(function(get_res){
         if(get_res.response) {
             payload = get_res.payload;
+            payload.guestname = decodeURI(payload.guestname);
             function pad(num, size) {
                 num = num.toString();
                 while (num.length < size) num = "0" + num;
