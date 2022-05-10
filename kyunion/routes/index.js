@@ -63,14 +63,18 @@ router.post('/new', async function(req, res) {
             if (reqBody.invitedby == "AddHost" && reqBody.new_host_name != "") {
                 payload.invitedby = reqBody.new_host_name;
                 await inPass.addHost(reqBody.new_host_name);
-            } else {
+            } else if (reqBody.invitedby == "AddHost" && reqBody.new_host_name == "") {
                 payload.invitedby = "Unattached"
+            } else {
+                payload.invitedby = reqBody.invitedby
             };
             if (reqBody.tablelabel == "AddTable" && reqBody.new_table_name != "") {
                 payload.tablelabel = reqBody.new_table_name;
                 await inPass.addTable(reqBody.new_table_name);
-            } else {
+            } else if (reqBody.tablelabel == "AddTable" && reqBody.new_table_name == "") {
                 payload.tablelabel = "Unassigned"
+            } else {
+                payload.tablelabel = reqBody.tablelabel
             };
             outList.push(payload);
         };
