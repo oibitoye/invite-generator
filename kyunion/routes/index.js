@@ -160,6 +160,7 @@ router.get('/created', async function(req, res) {
                     " "+date.getHours()+
                     ":"+date.getMinutes()+
                     ":"+date.getSeconds();
+                    payload[i].guestname = decodeURI(payload[i].guestname);
                     if(payload[i].createdby in creators_placeholder){
                         payload[i].creator = creators_placeholder[payload[i].createdby]
                     } else {
