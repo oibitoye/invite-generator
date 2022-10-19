@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}
+Created Invitations
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/starter-template.css">
+    <link rel="stylesheet" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="/css/new-iv-style.css">
+{% endblock %}
+{% block scripts %}
+{{super()}}
+<!-- JS -->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/js/new-iv-main.js"></script>
+<!-- <script type="text/javascript" src="/vendor/jquery/jquery-3.2.1.min.js"></script> -->
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> -->
+<script type='text/javascript'>
+    $(document).ready(function () {
+        $("#invitedby").change(function() {
+            let val = $(this).val();
+            if(val == "AddHost") {
+                $("#add_host").show();
+                $("#invitedby").hide();
+            }
+        });
+    $("#tablelabel").change(function() {
+        let val = $(this).val();
+        if(val == "AddTable") {
+            $("#add_table").show();
+            $("#tablelabel").hide();
+        };
+    })
+    });
+    function addFields(){
+        // Generate a dynamic number of inputs
+        let num = parseInt(document.getElementById("guest").value);
+        let j = 1;
+        var csrf = document.getElementById("csrf");
+        if (num && button.style.display === "none") {
+          button.style.display = "block";
+          document.getElementById("filldetails").innerText = "Add More Guest(s)";
+        };
+        let number = 0;
+        // Get the element where the inputs will be added to
+        var container = document.getElementById("gen-container");
+        // Remove every children it had before
+        // while (container.hasChildNodes()) {
+        //     container.removeChild(container.lastChild);
+        // }
+        let childCount = parseInt(document.querySelectorAll('#gen-container .form-control').length);
+        if (childCount == 10) {
+            document.getElementById("filldetails").style.display === "none";
+        }
+        console.log("Initial childcount: " + childCount);
+        if (container.hasChildNodes()) {
+          j = childCount + j;
+          console.log("New J: " + j);
+          // let childCount = document.getElementById("container").childElementCount;
+          if ((childCount + num) > 10 && childCount < 10) {
+            number = 10 - childCount
+          } else if ((childCount + num) > 10 && childCount == 10) {
+            number = 0
+          } else if ((childCount + num) < 10) {
+            number = num;
+          }
+        } else {
+          if (num > 10) {
+            number = 10
+          } else {
+            number = num
+          }
+        };
+    
+        for (i=0;i<number;i++){
+            j = j+i
+            // Append a node with a random text
+            let divChild = document.createElement("div");
+            divChild.className = "form-group";
+            let label = document.createElement("label");
+            let labelText = document.createTextNode("Guest" + j + " Name");
+            label.setAttribute("for", "Guest" + j + " Name");
+            label.appendChild(labelText);
+            divChild.appendChild(label);
+            // container.appendChild(document.createTextNode("Member " + (i+1)));
+            // Create an <input> element, set its type and name attributes
+            var input = document.createElement("input");
+            input.type = "text";
+            input.name = "guest" + j;
+            input.id = "guest" + j;
+            input.className = "memberIn";
+            input.className = "form-control";
+            input.placeholder = "Guest's Name";
+            input.ariaLabel = "Guest's Name";
+            divChild.appendChild(input);
+            container.insertBefore(input, csrf);
+            // Append a line break 
+            // container.appendChild(document.createElement("br"));
+        }
+    }
+  </script>
+{% endblock %}
+{% block content %}
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">KYUnion 2022</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li class=""><a href="/created">Show Invitations</a></li>
+            <li class="active"><a href="/new">Generate Invitations</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            {% if acc_type == 1 %}
+            <li><a href="/">Dashboard</a></li>
+            {% endif %}
+            <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="col-sm-6 col-sm-offset-1 main" id="entries"></div>
+    <div class="main">
+        <div class="container2">
+            <form method="POST" action="/new" class="appointment-form" id="appointment-form">
+                <h2>Invitation Card Generation form</h2>
+                <div class="form-group-1">
+                    <!-- <input type="text" name="title" id="title" placeholder="Title" required />
+                    <input type="text" name="name" id="name" placeholder="Your Name" required />
+                    <input type="email" name="email" id="email" placeholder="Email" required />
+                    <input type="number" name="phone_number" id="phone_number" placeholder="Phone number" required /> -->
+                    
+                    <div id="gen-container">
+                        <h3>Number of guests to be created: (max. 10)</h3>
+                        <input type="hidden" id="csrf" name="_csrf" value="{{csrfToken}}">
+                        <div class="form-group-2">
+                    <div class="col-sm-4">
+                    <select name="member" id="guest">
+                        <option selected value="">No of Guest</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                    </select> 
+                    </div>
+                    <div class="col-sm-4">
+                    <select name="invitedby" id="invitedby">
+                        <option disabled selected value=null>Host Name</option>
+                        {% for entry in allHosts %}
+                        <option value="{{entry}}">{{entry}}</option>
+                        {% endfor %}
+                        <option value="AddHost">Add Host</option>
+                    </select>
+                    <input type="text" id="add_host" name="new_host_name" size="25" placeholder="Enter Host Name" style="display:none;">
+                    </div>
+                    <div class="col-sm-4">
+                        <select name="tablelabel" id="tablelabel">
+                            <option disabled selected value=null>Table Name</option>
+                            {% for entry in allTables %}
+                            <option value="{{entry}}">{{entry}}</option>
+                            {% endfor %}
+                            <option value="AddTable">Add New Table</option>
+                        </select>
+                        <input type="text" id="add_table" name="new_table_name" size="25" placeholder="Enter Table Name" style="display:none;">
+                        </div>
+                    <a type="" href="#" id="filldetails" onclick="addFields()">Add Guest(s)</a>
+                    </div>
+                        <button type="submit" id="button" style="display: none;" class="btn btn-secondary" >Submit</button>
+                    </div>
+                </div>
+                <!-- <div class="form-group-2">
+                    <h3>How would you like to bo located ?</h3>
+                    <div class="select-list">
+                        <select name="confirm_type" id="confirm_type">
+                            <option seleected value="">By phone</option>
+                            <option value="by_email">By email</option>
+                        </select>
+                    </div>
+                    <div class="select-list">
+                        <select name="hour_appointment" id="hour_appointment">
+                            <option seleected value="">Hours : 8am 10pm</option>
+                            <option value="9h-11h">Hours : 9am 11pm</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+                    <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree to the  <a href="#" class="term-service">Terms and Conditions</a></label>
+                </div> -->
+                <!-- <div class="form-submit">
+                    <input type="submit" name="submit" id="submit" class="submit" value="Request an appointment" />
+                </div> -->
+            </form>
+        </div>
+    </div>
+</div>
+    {% endblock %}

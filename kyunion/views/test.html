@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        strong  {
+            color: #262626;
+            }
+
+            pre, .info {
+            font-size: smaller;
+            }
+
+            .info {
+            list-style: none;
+            display: inline;
+            }
+            .info:before {
+            content: "NB: ";
+            display: inline;
+            float: left;
+            margin-right: .5em;
+            }
+    </style>
+</head>
+<body>
+    <div class="container fluid">
+        <div class="row">
+          <h1>Fancybox - iframe in lightbox</h1>
+          <blockquote>A simple boilerplate to using the Fancybox jQuery plugin to open iframe in a lightbox.</blockquote>
+        </div>
+        <div class="row">View my blog <a href="http://www.netsi.dk/wordpress"  data-fancybox-type="iframe" class="fancyboxIframe">netsi</a> in an lightbox iFrame, using <a href="http://fancyapps.com/fancybox/"  data-fancybox-type="iframe" class="fancyboxIframe">fancybox</a>.
+        </div>
+      <div class="row">
+        <h4>HTML</h4>
+      <code>&lt;a href="http://www.netsi.dk/wordpress"  <strong>data-fancybox-type="iframe" class="fancyboxIframe"</strong>&gt;netsi&lt;/a&gt;</code>
+        </div>
+        <div class="row">
+      <h4>Include</h4>
+          <pre>
+      &lt;script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"&gt;&lt;/script&gt;
+      &lt;script src="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.1/jquery.fancybox.pack.js" type="text/javascript"&gt;&lt;/script&gt;
+      &lt;link rel="stylesheet" href="http://fancyapps.com/fancybox/source/jquery.fancybox.css?v=2.1.3" type="text/css" media="screen" /&gt;
+      </pre>
+      </div>
+        <div class="row">
+        <h4>javascript</h4>
+          <pre>$(function() {
+          $(".fancyboxIframe").fancybox({
+              maxWidth	: 900,
+              maxHeight	: 600,
+              fitToView	: false,
+              width		: '90%',
+              height		: '90%',
+              autoSize	: false,
+              closeClick	: false,
+              openEffect	: 'none',
+              closeEffect	: 'none',
+          iframe: {
+              scrolling : 'auto',
+              preload   : true
+          }
+          });
+      });</pre>
+          <ul class="info">
+            <li><a href="http://fancyapps.com/fancybox/#docs" target="_blank">all Fancybox settings</a></li>
+          </ul>
+        </div>
+      
+      
+      </div>
+      <link rel="stylesheet" href="http://fancyapps.com/fancybox/source/jquery.fancybox.css?v=2.1.3" type="text/css" media="screen" />
+      <script>
+          $(document).ready(function() {
+	$(".fancyboxIframe").fancybox({
+		maxWidth	: 900,
+		maxHeight	: 600,
+		fitToView	: false,
+		width		: '90%',
+		height		: '90%',
+		autoSize	: false,
+		closeClick	: false,
+		openEffect	: 'none',
+		closeEffect	: 'none',
+    iframe: {
+	    scrolling : 'auto',
+	    preload   : true
+    }
+	}).trigger('click');
+});
+      </script>
+</body>
+</html>

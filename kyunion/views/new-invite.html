@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}
+Created Invitations
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/starter-template.css">
+{% endblock %}
+{% block scripts %}
+{{super()}}
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+
+<script type='text/javascript'>
+  function addFields(){
+      // Generate a dynamic number of inputs
+      let num = parseInt(document.getElementById("guest").value);
+      let j = 1;
+      var button = document.getElementById("button");
+      if (num && button.style.display === "none") {
+        button.style.display = "block";
+      };
+      let number = 0;
+      // Get the element where the inputs will be added to
+      var container = document.getElementById("container");
+      // Remove every children it had before
+      // while (container.hasChildNodes()) {
+      //     container.removeChild(container.lastChild);
+      // }
+      let childCount = parseInt(document.querySelectorAll('#container .form-group').length);
+      console.log("Initial childcount: " + childCount);
+      if (container.hasChildNodes()) {
+        j = childCount + j;
+        console.log("New J: " + j);
+        // let childCount = document.getElementById("container").childElementCount;
+        if ((childCount + num) > 10 && childCount < 10) {
+          number = 10 - childCount
+        } else if ((childCount + num) > 10 && childCount == 10) {
+          number = 0
+        } else if ((childCount + num) < 10) {
+          number = num;
+        }
+      } else {
+        if (num > 10) {
+          number = 10
+        } else {
+          number = num
+        }
+      };
+  
+      for (i=0;i<number;i++){
+          j = j+i
+          // Append a node with a random text
+          let divChild = document.createElement("div");
+          divChild.className = "form-group";
+          let label = document.createElement("label");
+          let labelText = document.createTextNode("Guest" + j + " Name");
+          label.setAttribute("for", "Guest" + j + " Name");
+          label.appendChild(labelText);
+          divChild.appendChild(label);
+          // container.appendChild(document.createTextNode("Member " + (i+1)));
+          // Create an <input> element, set its type and name attributes
+          var input = document.createElement("input");
+          input.type = "text";
+          input.name = "guest" + j;
+          input.id = "guest" + j;
+          input.className = "memberIn";
+          input.className = "form-control";
+          input.placeholder = "Guest's Name";
+          input.ariaLabel = "Guest's Name";
+          divChild.appendChild(input);
+          container.insertBefore(divChild, button);
+          // Append a line break 
+          // container.appendChild(document.createElement("br"));
+      }
+  }
+</script>
+
+{% endblock %}
+{% block content %}
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">KYUnion 2022</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <li class=""><a href="/created">Show Invitations</a></li>
+          <li class="active"><a href="/new">Generate Invitations</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {% if acc_type == 1 %}
+          <li><a href="/">Dashboard</a></li>
+          {% endif %}
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div>
+    <section class="vh-100" style="background-color: #2779e2;">
+      <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-xl-9">
+    
+            <h1 class="text-white mb-4">Apply for a job</h1>
+    
+            <div class="card" style="border-radius: 15px;">
+              <div class="card-body">
+    
+                <div class="row align-items-center pt-4 pb-3">
+                  <div class="col-md-3 ps-5">
+    
+                    <h6 class="mb-0">Full name</h6>
+    
+                  </div>
+                  <div class="col-md-9 pe-5">
+    
+                    <input type="text" class="form-control form-control-lg" />
+    
+                  </div>
+                </div>
+    
+                <hr class="mx-n3">
+    
+                <div class="row align-items-center py-3">
+                  <div class="col-md-3 ps-5">
+    
+                    <h6 class="mb-0">Email address</h6>
+    
+                  </div>
+                  <div class="col-md-9 pe-5">
+    
+                    <input type="email" class="form-control form-control-lg" placeholder="example@example.com" />
+    
+                  </div>
+                </div>
+    
+                <hr class="mx-n3">
+    
+                <div class="row align-items-center py-3">
+                  <div class="col-md-3 ps-5">
+    
+                    <h6 class="mb-0">Full name</h6>
+    
+                  </div>
+                  <div class="col-md-9 pe-5">
+    
+                    <textarea class="form-control" rows="3" placeholder="Message sent to the employer"></textarea>
+    
+                  </div>
+                </div>
+    
+                <hr class="mx-n3">
+    
+                <div class="row align-items-center py-3">
+                  <div class="col-md-3 ps-5">
+    
+                    <h6 class="mb-0">Upload CV</h6>
+    
+                  </div>
+                  <div class="col-md-9 pe-5">
+    
+                    <input class="form-control form-control-lg" id="formFileLg" type="file" />
+                    <div class="small text-muted mt-2">Upload your CV/Resume or any other relevant file. Max file
+                      size 50 MB</div>
+    
+                  </div>
+                </div>
+    
+                <hr class="mx-n3">
+    
+                <div class="px-5 py-4">
+                  <button type="submit" class="btn btn-primary btn-lg">Send application</button>
+                </div>
+    
+              </div>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+    <div class="col-sm-4 col-sm-offset-1 main" id="entries">
+      <h1 class="page-header">"Hello, {{ user.firstName }}</h1>
+        <!-- <div class="row"> -->
+          <div class="form-row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <select id="guest" name="member" class="form-control">
+                  <option selected value=1>1</option>
+                  <option value=2>2</option>
+                </select> Number of Guest: (max. 10)
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <select id="guest" name="member" class="form-control">
+                    <option selected value=1>1</option>
+                    <option value=2>2</option>
+                  </select><br />
+                  <div class="form-group">
+                    <input type="text" hidden name="InvitedBy" id="invitedby">
+                    <a type="button" class="btn btn-primary" href="#" id="filldetails" onclick="addFields()">Fill Details</a>
+                  </div>
+                </div>
+            </div>
+            </div>
+          </div>
+          
+        <!-- </div> -->
+        <div class="row">
+          <div class="col-sm-12">
+            <form>
+              <div id="container">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button type="button" id="button" style="display: none;" class="btn btn-secondary btn-lg" >Button</button>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
+
+{% endblock %}

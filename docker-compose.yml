@@ -1,0 +1,95 @@
+version: '3'
+
+services:
+  php:
+    env_file: .env
+    image: worktainer_php
+    container_name: ${APP_NAME}_kuphp
+    build:
+      context: ./etc/php/
+    entrypoint: sh /bin/entrypoint.sh php-fpm
+    restart: always
+    volumes:
+      - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "./etc/php/entrypoint.sh:/bin/entrypoint.sh"
+      - "./${APP_PATH}/:/var/www"
+    links:
+      - db:mysql
+    expose:
+      - 9900
+  db:
+    image: mysql:8
+    container_name: ${APP_NAME}_kudb
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - "./etc/db/data:/var/lib/mysql"
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      '--default-authentication-plugin=mysql_native_password'
+    ]
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ${APP_NAME}_kupma
+    ports:
+      - 5555:80
+    links:
+      - db:db
+    depends_on:
+      - db
+      - apache
+  nodejs:
+    env_file: .env
+    image: worktainer_nodejs
+    build:
+      context: ./etc/nodejs
+    container_name: ${APP_NAME}_nodejs
+    restart: "no"
+    entrypoint: sh /bin/entrypoint.sh
+    volumes:
+      - "./${APP_PATH}/:/var/www/html"
+      - ./etc/nodejs/entrypoint.sh:/bin/entrypoint.sh
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+    ports:
+      - 8030:8030
+  apache:
+    env_file: .env
+    image: worktainer_apache
+    build:
+      context: ./etc/httpd
+    volumes:
+      - "./etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf"
+      - "./${APP_PATH}/:/var/www"
+    depends_on:
+      - php
+    expose:
+      - 8080
+  web:
+    env_file: .env
+    image: worktainer_web
+    build:
+      context: ./etc/nginx
+    container_name: ${APP_NAME}_kunginx
+    restart: always
+    volumes:
+      - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "./etc/nginx/app.conf:/etc/nginx/sites-available/application.conf"
+      - "./etc/nginx/app.conf:/etc/nginx/sites-enabled/application"
+      - "./etc/log/nginx:/var/log/nginx"
+      - "./etc/nginx/privkey.pem:/etc/nginx/privkey.pem"
+      - "./etc/nginx/httpschain.pem:/etc/nginx/httpschain.pem"
+      - "./${APP_PATH}/:/var/www"
+    ports:
+      - 80:80
+    depends_on:
+      - nodejs
+      - db
