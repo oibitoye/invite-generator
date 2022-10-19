@@ -5,6 +5,7 @@ const User = require('../controller/passport').User;
 const Invite = require('../controller/passport').Invite;
 const inPass = require('../controller/passport');
 const bcrypt = require('bcryptjs');
+const secret = process.env.DB_SECRET;
 
 const { get } = require('http');
 
@@ -199,9 +200,9 @@ router.get('/created', async function(req, res) {
 router.post('/auth', async function(req, res, next) {
     delete req.session.errors;
     delete req.session.info;
-    // let secret = bcrypt.genSaltSync(15);
-    // console.log(secret);
-    // console.log(bcrypt.hashSync('Luwamide@123', secret));
+    let secret = bcrypt.genSaltSync(15);
+    console.log(secret);
+    console.log(bcrypt.hashSync('UnionPassword@123', secret));
     let user_load = {};
     let errors = [];
     let username = req.body.username,

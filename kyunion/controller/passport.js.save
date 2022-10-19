@@ -1,3 +1,4 @@
+
 const bcrypt = require('bcryptjs');
 const secret = process.env.DB_SECRET;
 const LocalStrategy = require('passport-local');
@@ -54,7 +55,7 @@ const TableLabel = sequelize.define('tablelabel', {
     updatedAt: {type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), trim: true}
 });
 
-//await TableLabel.sync({ alter: true });
+await TableLabel.sync({ alter: true });
 
 const User = sequelize.define('user', {
     id: {type: Sequelize.SMALLINT, autoIncrement: true},
@@ -68,7 +69,7 @@ const User = sequelize.define('user', {
     updatedAt: {type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), trim: true}
 });
 
-//await User.sync({ alter: true });
+await User.sync({ alter: true });
 
 
 const Invite = sequelize.define('invite', {
@@ -79,12 +80,12 @@ const Invite = sequelize.define('invite', {
     guestname: {type: Sequelize.STRING, allowNull: false, trim: true, validate: {notEmpty: true, min: 3}},
     invitedby: {type: Sequelize.STRING, allowNull: false, trim: true, validate: {notEmpty: true, min: 3}},
     urlcode: {type: Sequelize.STRING, unique: true, allowNull: false, trim: true, validate: {notEmpty: true, min: 3}},
-    createdby: {type: Sequelize.UUIDV4, unique: false, defaultValue: Sequelize.UUIDV4},
+    createdby: {type: Sequelize.UUIDV4, unique: true, defaultValue: Sequelize.UUIDV4},
     createdAt: {type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), trim: true},
     updatedAt: {type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), trim: true}
 });
 
-//sequelize.sync({ alter: true });
+await sequelize.sync({ alter: true });
 
 
 async function auth(username,password) {
