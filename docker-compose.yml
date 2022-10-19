@@ -5,12 +5,14 @@ services:
     env_file: .env
     image: worktainer_php
     container_name: ${APP_NAME}_kuphp
+    build:
+      context: ./etc/php/
     entrypoint: sh /bin/entrypoint.sh php-fpm
     restart: always
     volumes:
       - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
       - "./etc/php/entrypoint.sh:/bin/entrypoint.sh"
-      - ${APP_PATH}:/var/www
+      - "./${APP_PATH}/:/var/www"
     links:
       - db:mysql
     expose:
@@ -45,11 +47,13 @@ services:
   nodejs:
     env_file: .env
     image: worktainer_nodejs
+    build:
+      context: ./etc/nodejs
     container_name: ${APP_NAME}_nodejs
     restart: "no"
     entrypoint: sh /bin/entrypoint.sh
     volumes:
-      - ${APP_PATH}:/var/www/html
+      - "./${APP_PATH}/:/var/www/html"
       - ./etc/nodejs/entrypoint.sh:/bin/entrypoint.sh
     depends_on:
       - db
@@ -60,9 +64,11 @@ services:
   apache:
     env_file: .env
     image: worktainer_apache
+    build:
+      context: ./etc/httpd
     volumes:
       - "./etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf"
-      - ${APP_PATH}:/var/www
+      - "./${APP_PATH}/:/var/www"
     depends_on:
       - php
     expose:
@@ -70,6 +76,8 @@ services:
   web:
     env_file: .env
     image: worktainer_web
+    build:
+      context: ./etc/nginx
     container_name: ${APP_NAME}_kunginx
     restart: always
     volumes:
@@ -79,7 +87,7 @@ services:
       - "./etc/log/nginx:/var/log/nginx"
       - "./etc/nginx/privkey.pem:/etc/nginx/privkey.pem"
       - "./etc/nginx/httpschain.pem:/etc/nginx/httpschain.pem"
-      - ${APP_PATH}:/var/www
+      - "./${APP_PATH}/:/var/www"
     ports:
       - 80:80
     depends_on:
