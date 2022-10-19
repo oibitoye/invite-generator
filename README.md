@@ -25,8 +25,14 @@ These are all the that should be done before running the project.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DB_SECRET=<db_secret> E.g: 8dgfjhfdfdj2a$15$BTBx1kghhfgfeFuxHT5vKDPjvtSO  
     
 
-#### 3. Education is when you read the fine print. Experience is what you get if you don't
-* ...
+#### 3. Run Docker-Compose
+* Run docker-compose command to create containers for the following services:
+  - php
+  - db
+  - phpmyadmin
+  - nodejs
+  - apache
+  - web (Invite Gen App)
 
 #### 4. Education is when you read the fine print. Experience is what you get if you don't
 * ...
