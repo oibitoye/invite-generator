@@ -34,8 +34,11 @@ These are all the that should be done before running the project.
   - apache
   - web (Invite Gen App)
 
-#### 4. Education is when you read the fine print. Experience is what you get if you don't
-* ...
+#### 4. Clean-Up Database
+* Open up a web browser access the Database's PHPMyAdmin Web console:
+  - visit http://server_name_or_ip_address:5555
+  - login with the Database credentials specified in the env file
+  - If you are hosting on azure or AWS, ensure that port 5555 is opened to a tcp requests
 
 #### 5. Education is when you read the fine print. Experience is what you get if you don't
 * ...
